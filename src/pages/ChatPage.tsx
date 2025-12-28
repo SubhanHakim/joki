@@ -1,8 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { terrasuck } from "../agent/terrasuck";
-import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -21,7 +20,7 @@ interface ChatSession {
     messages: Message[];
 }
 
-const DEFAULT_SYSTEM_PROMPT = "You are terrasuck. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.";
+const DEFAULT_SYSTEM_PROMPT = "You are POLYCORE. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.";
 
 // Component for Message with potential Typewriter effect (simplified for Markdown compatibility)
 const MessageContent = ({ content, isLatestAssistant }: { content: string, isLatestAssistant: boolean }) => {
@@ -76,7 +75,8 @@ const MessageContent = ({ content, isLatestAssistant }: { content: string, isLat
 }
 
 export default function ChatPage() {
-    const { publicKey } = useWallet();
+    // const { publicKey } = useWallet(); // Wallet Removed
+    const publicKey = null; // Always Guest Mode
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -138,44 +138,40 @@ export default function ChatPage() {
     const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
     const [isStorageLoaded, setIsStorageLoaded] = useState(false); // Safety flag
 
-    // Load sessions from local storage when wallet changes
+    // Load sessions from local storage (Guest Mode Only)
     useEffect(() => {
-        if (publicKey) {
-            const key = `terrasuck_sessions_${publicKey.toBase58()}`;
-            const saved = localStorage.getItem(key);
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    setSessions(parsed);
-                } catch (e) {
-                    setSessions([]);
-                }
-            } else {
+        const storageKey = `terrasuck_sessions_guest`;
+        const saved = localStorage.getItem(storageKey);
+
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                setSessions(parsed);
+            } catch (e) {
                 setSessions([]);
             }
-            setIsStorageLoaded(true); // Mark as loaded
         } else {
             setSessions([]);
-            setMessages([]);
-            setCurrentSessionId(null);
-            setIsStorageLoaded(false);
         }
-    }, [publicKey]);
+
+        // Reset view for new context, but don't wipe sessions
+        setMessages([]);
+        setCurrentSessionId(null);
+        setIsStorageLoaded(true); // Mark as loaded
+    }, []);
 
     // Save sessions whenever they change
     useEffect(() => {
         if (!isStorageLoaded) return; // BLOCK SAVING UNTIL LOADED
 
-        if (publicKey) {
-            const key = `terrasuck_sessions_${publicKey.toBase58()}`;
-            if (sessions.length > 0) {
-                localStorage.setItem(key, JSON.stringify(sessions));
-            } else {
-                // Only remove if we explicitly have 0 sessions AND we are loaded
-                localStorage.removeItem(key);
-            }
+        const storageKey = `terrasuck_sessions_guest`;
+
+        if (sessions.length > 0) {
+            localStorage.setItem(storageKey, JSON.stringify(sessions));
+        } else {
+            localStorage.removeItem(storageKey);
         }
-    }, [sessions, publicKey, isStorageLoaded]);
+    }, [sessions, isStorageLoaded]);
 
     const createNewSession = () => {
         playSound('click');
@@ -211,7 +207,7 @@ export default function ChatPage() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `terrasuck_extraction_${new Date().toISOString().slice(0, 10)}.txt`;
+        a.download = `polycore_extraction_${new Date().toISOString().slice(0, 10)}.txt`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -287,7 +283,7 @@ export default function ChatPage() {
                         <span className="w-8 h-8 rounded bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-orange-500/50 transition-colors">
                             T
                         </span>
-                        <span className="font-bold text-gray-200 group-hover:text-white transition-colors">[TERRASUCK]</span>
+                        <span className="font-bold text-gray-200 group-hover:text-white transition-colors">[POLYCORE]</span>
                     </a>
                     <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-500">
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -346,21 +342,17 @@ export default function ChatPage() {
                         </div>
                         <div className="flex-1 overflow-hidden">
                             <div className="text-sm font-medium truncate text-gray-300">
-                                {publicKey ? `0x${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "Operator"}
+                                Operator
                             </div>
                             <div className="text-xs text-green-500 flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                {publicKey ? "Wallet Connected" : "Connecting..."}
+                                Guest Access
                             </div>
                         </div>
                     </div>
 
                     {/* Mobile Disconnect Button (Visible only when wallet is connected) */}
-                    {publicKey && (
-                        <div className="md:hidden">
-                            <WalletMultiButton className="!bg-red-500/10 !border !border-red-500/20 !text-red-400 !w-full !justify-center !h-10 !text-sm hover:!bg-red-500/20 !transition-colors !rounded-lg" />
-                        </div>
-                    )}
+
                 </div>
             </aside>
 
@@ -419,9 +411,7 @@ export default function ChatPage() {
                         >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </button>
-                        <div className="flex-shrink-0">
-                            <WalletMultiButton className="!bg-white/5 !text-xs !font-mono !h-9 md:!h-8 !px-3 hover:!bg-white/10 !rounded-lg whitespace-nowrap" />
-                        </div>
+
                     </div>
                 </div>
 
@@ -439,7 +429,7 @@ export default function ChatPage() {
                                 <div>
                                     <h2 className="text-xl md:text-2xl font-bold tracking-tight mb-2">System Ready</h2>
                                     <p className="max-w-xs md:max-w-md text-sm md:text-base text-gray-400 mx-auto leading-relaxed">
-                                        Awaiting input from node <span className="text-orange-500 font-mono">{publicKey ? publicKey.toBase58().slice(0, 6) : "Unknown"}</span>.
+                                        Awaiting input from node <span className="text-orange-500 font-mono">GUEST_NODE_01</span>.
                                         Configure persona in settings.
                                     </p>
                                 </div>
@@ -477,7 +467,7 @@ export default function ChatPage() {
                                         {msg.role === 'user' ? (
                                             <div className="font-medium text-gray-200">
                                                 <div className="text-[10px] text-gray-500 font-mono mb-1">
-                                                    {publicKey ? publicKey.toBase58().slice(0, 8) + '...' : 'ANONYMOUS'}
+                                                    GUEST_NODE
                                                 </div>
                                                 <div className="whitespace-pre-wrap break-words">{msg.content}</div>
                                             </div>

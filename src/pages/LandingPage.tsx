@@ -1,21 +1,13 @@
 import Terminal from '../components/Terminal'
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { useNavigate } from 'react-router-dom';
 
 
 export default function LandingPage() {
-    const { connected } = useWallet();
-    const { setVisible } = useWalletModal();
     const navigate = useNavigate();
 
     const handleEnterTerminal = (e: React.MouseEvent) => {
         e.preventDefault();
-        if (connected) {
-            navigate('/chat');
-        } else {
-            setVisible(true);
-        }
+        navigate('/chat');
     };
 
     return (
@@ -40,7 +32,7 @@ export default function LandingPage() {
                 <div className="flex items-center justify-between px-6 py-4 w-full max-w-[1400px] mx-auto">
                     <div className="flex items-center gap-2">
                         <span className="text-xl font-mono font-bold tracking-tight text-white select-none">
-                            [TERRASUCK]
+                            [POLYCORE]
                         </span>
                     </div>
 
@@ -51,21 +43,13 @@ export default function LandingPage() {
                         <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Docs</a>
                     </div>
 
-                    {/* Connect/Launch Button - Visible on ALL screens */}
+                    {/* Enter Terminal Button */}
                     <div className="flex items-center gap-4">
-                        {!connected && (
-                            <button
-                                onClick={() => setVisible(true)}
-                                className="text-gray-400 hover:text-white transition-colors hidden sm:block"
-                            >
-                                Sign In
-                            </button>
-                        )}
                         <button
                             onClick={handleEnterTerminal}
                             className="bg-[#ea580c] text-white px-4 py-2 text-sm md:px-5 md:py-2 md:text-base rounded-md font-semibold hover:bg-[#c2410c] transition-all duration-200 flex items-center gap-2 shadow-[0_0_15px_rgba(234,88,12,0.3)] hover:shadow-[0_0_25px_rgba(234,88,12,0.5)] whitespace-nowrap"
                         >
-                            {connected ? 'Launch Terminal' : 'Connect Wallet'}
+                            Launch Terminal
                         </button>
                     </div>
                 </div>
@@ -102,7 +86,7 @@ export default function LandingPage() {
                             onClick={handleEnterTerminal}
                             className="px-8 py-3 rounded-full bg-orange-600 hover:bg-orange-500 text-white font-bold shadow-[0_0_20px_rgba(234,88,12,0.3)] hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:scale-105 transition-all duration-300 flex items-center gap-2"
                         >
-                            <span>{connected ? 'Enter Terminal' : 'Connect & Enter'}</span>
+                            <span>Enter Terminal</span>
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         </button>
                     </div>
@@ -113,7 +97,7 @@ export default function LandingPage() {
                     <div className="rounded-lg border border-gray-800 bg-[#0A0A0A] overflow-hidden shadow-2xl shadow-orange-900/10">
                         {/* Fake 'tab' or header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-white/5">
-                            <div className="text-xs font-mono text-gray-500">terrasuck-cli — 80x24</div>
+                            <div className="text-xs font-mono text-gray-500">polycore-cli — 80x24</div>
                             <div className="flex gap-1.5">
                                 <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                                 <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
@@ -127,7 +111,7 @@ export default function LandingPage() {
 
                         {/* Footer instruction line */}
                         <div className="px-4 py-3 border-t border-gray-800 bg-white/5 text-xs text-orange-500 font-mono">
-                            $ npx terrasuck init
+                            $ npx polycore init
                         </div>
                     </div>
                 </div>
@@ -293,7 +277,7 @@ export default function LandingPage() {
             <footer className="w-full border-t border-white/5 bg-black/80 backdrop-blur-sm relative z-10">
                 <div className="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-4">
-                        <span className="font-mono font-bold text-gray-300">[TERRASUCK]</span>
+                        <span className="font-mono font-bold text-gray-300">[POLYCORE]</span>
                         <span>&copy; 2025</span>
                     </div>
 

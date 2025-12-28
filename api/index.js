@@ -23,7 +23,7 @@ app.post("/api/terrasuck", async (req, res) => {
             messages: [
                 {
                     role: "system",
-                    content: systemPrompt || `You are terrasuck. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.`
+                    content: systemPrompt || `You are POLYCORE. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.`
                 },
                 { role: "user", content: input }
             ],
