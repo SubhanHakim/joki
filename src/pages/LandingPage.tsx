@@ -1,5 +1,6 @@
 import Terminal from '../components/Terminal'
 import { useNavigate } from 'react-router-dom';
+import dexscreenerIcon from '../assets/dexscreener.svg';
 
 
 export default function LandingPage() {
@@ -32,7 +33,7 @@ export default function LandingPage() {
                 <div className="flex items-center justify-between px-6 py-4 w-full max-w-[1400px] mx-auto">
                     <div className="flex items-center gap-2">
                         <span className="text-xl font-mono font-bold tracking-tight text-white select-none">
-                            [POLYCORE]
+                            [NEXORA]
                         </span>
                     </div>
 
@@ -75,10 +76,10 @@ export default function LandingPage() {
                             <span>Follow Protocol</span>
                         </a>
 
-                        {/* Pump.fun Link */}
-                        <a href="#" className="px-6 py-3 rounded-full bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 hover:border-green-500/40 text-green-400 hover:text-green-300 flex items-center gap-2 transition-all duration-300 font-medium">
-                            <span>💊</span>
-                            <span>Pump.fun</span>
+                        {/* Dexscreener Link */}
+                        <a href="https://dexscreener.com/" target="_blank" className="px-6 py-3 rounded-full bg-[#1e2329]/50 hover:bg-[#2b323b]/80 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white flex items-center gap-2 transition-all duration-300 font-medium">
+                            <img src={dexscreenerIcon} alt="Dexscreener" className="w-5 h-5" />
+                            <span>Dexscreener</span>
                         </a>
 
                         {/* Dashboard Entry */}
@@ -97,7 +98,7 @@ export default function LandingPage() {
                     <div className="rounded-lg border border-gray-800 bg-[#0A0A0A] overflow-hidden shadow-2xl shadow-orange-900/10">
                         {/* Fake 'tab' or header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-white/5">
-                            <div className="text-xs font-mono text-gray-500">polycore-cli — 80x24</div>
+                            <div className="text-xs font-mono text-gray-500">nexora-cli — 80x24</div>
                             <div className="flex gap-1.5">
                                 <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                                 <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
@@ -111,7 +112,7 @@ export default function LandingPage() {
 
                         {/* Footer instruction line */}
                         <div className="px-4 py-3 border-t border-gray-800 bg-white/5 text-xs text-orange-500 font-mono">
-                            $ npx polycore init
+                            $ npx nexora init
                         </div>
                     </div>
                 </div>
@@ -277,7 +278,7 @@ export default function LandingPage() {
             <footer className="w-full border-t border-white/5 bg-black/80 backdrop-blur-sm relative z-10">
                 <div className="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-4">
-                        <span className="font-mono font-bold text-gray-300">[POLYCORE]</span>
+                        <span className="font-mono font-bold text-gray-300">[NEXORA]</span>
                         <span>&copy; 2025</span>
                     </div>
 

@@ -20,7 +20,7 @@ interface ChatSession {
     messages: Message[];
 }
 
-const DEFAULT_SYSTEM_PROMPT = "You are POLYCORE. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.";
+const DEFAULT_SYSTEM_PROMPT = "You are NEXORA. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.";
 
 // Component for Message with potential Typewriter effect (simplified for Markdown compatibility)
 const MessageContent = ({ content, isLatestAssistant }: { content: string, isLatestAssistant: boolean }) => {
@@ -206,7 +206,7 @@ export default function ChatPage() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `polycore_extraction_${new Date().toISOString().slice(0, 10)}.txt`;
+        a.download = `nexora_extraction_${new Date().toISOString().slice(0, 10)}.txt`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -282,7 +282,7 @@ export default function ChatPage() {
                         <span className="w-8 h-8 rounded bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-orange-500/50 transition-colors">
                             T
                         </span>
-                        <span className="font-bold text-gray-200 group-hover:text-white transition-colors">[POLYCORE]</span>
+                        <span className="font-bold text-gray-200 group-hover:text-white transition-colors">[NEXORA]</span>
                     </a>
                     <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-500">
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
