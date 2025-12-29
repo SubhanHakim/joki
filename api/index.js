@@ -13,7 +13,7 @@ const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
 });
 
-app.post("/api/terrasuck", async (req, res) => {
+const handleTerrasuck = async (req, res) => {
     try {
         const { input, model, systemPrompt } = req.body;
 
@@ -37,9 +37,13 @@ app.post("/api/terrasuck", async (req, res) => {
         console.error("Error processing request:", err);
         res.status(500).json({ error: "Agent failure" });
     }
-});
+};
 
-app.get("/api/models", async (req, res) => {
+// Handle both paths to be safe with Vercel routing
+app.post("/api/terrasuck", handleTerrasuck);
+app.post("/terrasuck", handleTerrasuck); // In case Vercel strips /api prefix
+
+const handleModels = async (req, res) => {
     try {
         const response = await fetch("https://api.groq.com/openai/v1/models", {
             headers: {
@@ -58,7 +62,10 @@ app.get("/api/models", async (req, res) => {
         console.error("Error fetching models:", err);
         res.status(500).json({ error: "Failed to fetch models" });
     }
-});
+};
+
+app.get("/api/models", handleModels);
+app.get("/models", handleModels);
 
 // Root endpoint check
 app.get("/api", (req, res) => {
