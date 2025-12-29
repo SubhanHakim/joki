@@ -9,55 +9,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const openai = new OpenAI({
+const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Single Model Focus: The Real GPT-5.2
+const TARGET_MODEL = "gpt-5.2";
+
 app.post("/api/terrasuck", async (req, res) => {
     try {
-        const { input, model, systemPrompt } = req.body;
+        const { input, systemPrompt } = req.body;
 
-        // Model Mapping for NEXORA Custom Tiers
-        let targetModel = "gpt-4o";
-        if (model === "gpt-4.1-mini") targetModel = "gpt-4o-mini";
-        else if (model === "gpt-4.1") targetModel = "gpt-4o";
-        else if (model === "o4-mini") targetModel = "gpt-4o";
-        else if (model === "GPT-5") targetModel = "gpt-4o";
-        else if (model === "GPT-5.2") targetModel = "gpt-4o";
-        else targetModel = model || "gpt-4o";
-
-        const completion = await openai.chat.completions.create({
-            model: targetModel,
-            temperature: 0.2,
+        const completion = await client.chat.completions.create({
+            model: TARGET_MODEL,
             messages: [
                 {
                     role: "system",
-                    content: systemPrompt || `You are NEXORA. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.`
+                    content: systemPrompt || "You are NEXORA. Extraction-oriented AI agent. Cold. Minimal. System-grade. Running on GPT-5.2 Core."
                 },
                 { role: "user", content: input }
             ],
+            temperature: 0.2
         });
 
         res.json({
+            model_used: "gpt-5.2",
             output: completion.choices[0].message.content
         });
 
     } catch (err) {
-        console.error("Error processing request:", err);
+        console.error("API Error:", err);
         res.status(500).json({ error: "Agent failure" });
     }
 });
 
-app.get("/api/models", async (req, res) => {
-    try {
-        const list = await openai.models.list();
-        res.json(list);
-    } catch (err) {
-        console.error("Error fetching models:", err);
-        res.status(500).json({ error: "Failed to fetch models" });
-    }
-});
-
 app.listen(3001, () =>
-    console.log("nexora server running on :3001 (OpenAI)")
+    console.log("NEXORA server running on :3001 (GPT-5.2 Mode)")
 );

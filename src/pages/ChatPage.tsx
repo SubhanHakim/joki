@@ -88,9 +88,7 @@ export default function ChatPage() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false); // Settings modal state
 
     // Model & System Prompt State
-    const [models, setModels] = useState<any[]>([]);
-    const [selectedModel, setSelectedModel] = useState("gpt-4.1-mini");
-    const [showModelDropdown, setShowModelDropdown] = useState(false);
+
     const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
 
     useEffect(() => {
@@ -108,16 +106,7 @@ export default function ChatPage() {
         }
     }, [input]);
 
-    useEffect(() => {
-        // Custom Model List for NEXORA
-        setModels([
-            { id: 'gpt-4.1-mini' }, // User Chat cepat + murah
-            { id: 'gpt-4.1' },      // Creative / narrative
-            { id: 'o4-mini' },      // Deep reasoning / AI Agent
-            { id: 'GPT-5' },        // Top quality
-            { id: 'GPT-5.2' }       // Ultra/God Mode
-        ]);
-    }, []);
+
 
     // Session Management
     const [sessions, setSessions] = useState<ChatSession[]>([]);
@@ -235,7 +224,7 @@ export default function ChatPage() {
         setIsLoading(true);
 
         try {
-            const output = await terrasuck(userMessage, selectedModel, systemPrompt);
+            const output = await terrasuck(userMessage, systemPrompt);
             playSound('receive');
             const newHistoryAssistant = [...newHistoryUser, { role: 'assistant', content: output } as Message];
             setMessages(newHistoryAssistant);
@@ -354,36 +343,14 @@ export default function ChatPage() {
                         </button>
                     </div>
 
-                    {/* Center: Model Selector */}
-                    <div className="mx-auto bg-[#1a1a1a]/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2 md:gap-3 shadow-2xl pointer-events-auto relative z-50 max-w-[50%] md:max-w-none">
-                        <div className="relative min-w-0">
-                            <button
-                                onClick={() => setShowModelDropdown(!showModelDropdown)}
-                                className="flex items-center gap-1 md:gap-2 text-xs md:text-sm font-medium text-gray-300 hover:text-white transition-colors outline-none w-full"
-                            >
-                                <span className="truncate max-w-[80px] sm:max-w-[150px]">{selectedModel}</span>
-                                <svg className={`w-3 h-3 text-gray-500 transition-transform flex-shrink-0 ${showModelDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            {/* Dropdown Logic remains same ... */}
-                            {showModelDropdown && (
-                                <div className="absolute top-full left-0 mt-3 w-56 md:w-64 max-h-60 overflow-y-auto bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl py-2 scrollbar-thin scrollbar-thumb-gray-700">
-                                    {models.map((m: any) => (
-                                        <button
-                                            key={m.id}
-                                            onClick={() => {
-                                                setSelectedModel(m.id);
-                                                setShowModelDropdown(false);
-                                            }}
-                                            className={`w-full text-left px-4 py-2 text-xs font-mono hover:bg-white/5 transition-colors ${selectedModel === m.id ? 'text-indigo-500 bg-white/5' : 'text-gray-400'}`}
-                                        >
-                                            {m.id}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                    {/* Center: Model Selector (Fixed) */}
+                    <div className="mx-auto bg-[#1a1a1a]/95 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 flex items-center gap-2 md:gap-3 shadow-2xl pointer-events-auto relative z-50">
+                        <span className="text-xs md:text-sm font-medium text-white flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                            GPT-5.2
+                        </span>
                         <div className="h-3 w-px bg-white/10 hidden sm:block"></div>
-                        <span className="text-[10px] text-orange-500 font-bold tracking-widest px-1 hidden sm:inline">LIVE</span>
+                        <span className="text-[10px] text-orange-500 font-bold tracking-widest px-1 hidden sm:inline">GOD MODE</span>
                     </div>
 
                     {/* Right Side: Settings & Wallet */}
