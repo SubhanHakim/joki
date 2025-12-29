@@ -35,8 +35,9 @@ export default function WorkflowVisualizer() {
                             <div className="h-2 w-full bg-white/10 rounded animate-pulse delay-75" />
                             <div className="h-2 w-5/6 bg-white/10 rounded animate-pulse delay-150" />
                         </div>
-                        <div className="mt-4 text-xs font-mono text-gray-500">
-                            "BTC is pumping to 95k, volume up 20%..."
+                        <div className="mt-4 text-xs font-mono text-gray-500 leading-relaxed">
+                            <span className="text-gray-600">&gt;</span> Monitoring solana_new_pairs...<br />
+                            <span className="text-green-500/50">&gt;</span> "Found $NEXORA launching. CA verified. Sending it! 🚀"
                         </div>
                     </div>
 
@@ -54,10 +55,10 @@ export default function WorkflowVisualizer() {
 
                         <div className={`relative z-10 w-24 h-24 rounded-full border flex items-center justify-center transition-all duration-500 ${step === 1 ? 'border-indigo-500 bg-indigo-900/20 scale-110 shadow-[0_0_50px_rgba(99,102,241,0.4)]' : 'border-white/10 bg-black scale-100'}`}>
                             <div className={`absolute inset-0 rounded-full border-t-2 border-indigo-500 ${step === 1 ? 'animate-spin' : 'hidden'}`} />
-                            <svg className={`w-10 h-10 transition-colors ${step === 1 ? 'text-white' : 'text-gray-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                            <svg className={`w-10 h-10 transition-colors ${step === 1 ? 'text-white' : 'text-gray-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M3.343 19.05l1.414-1.414M18.364 19.05l-1.414-1.414M20.657 5.343l-1.414-1.414" /></svg>
                         </div>
                         <div className="mt-4 text-xs font-mono tracking-widest text-indigo-400 uppercase">
-                            {step === 1 ? 'Extracting...' : 'Nexora Engine'}
+                            {step === 1 ? 'Analysing CA...' : 'Nexora AI'}
                         </div>
                     </div>
 
@@ -65,15 +66,16 @@ export default function WorkflowVisualizer() {
                     <div className={`relative p-6 rounded-xl border transition-all duration-700 ${step === 2 || step === 3 ? 'border-green-500/50 bg-green-900/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]' : 'border-white/5 bg-white/5 opacity-50'}`}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`p-2 rounded-lg ${step === 2 || step === 3 ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-400'}`}>
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
-                            <h3 className="text-sm font-bold text-gray-200">Structured Data</h3>
+                            <h3 className="text-sm font-bold text-gray-200">Alpha Signal</h3>
                         </div>
                         <div className="font-mono text-[10px] md:text-xs text-green-400 bg-black/50 p-3 rounded-lg border border-white/5 shadow-inner">
                             <span className="text-purple-400">{"{"}</span><br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"asset"</span>: <span className="text-yellow-300">"BTC"</span>,<br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"price"</span>: <span className="text-yellow-300">95000</span>,<br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"signal"</span>: <span className="text-green-300">"BULLISH"</span><br />
+                            &nbsp;&nbsp;<span className="text-blue-400">"token"</span>: <span className="text-yellow-300">"$NEXORA"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-blue-400">"network"</span>: <span className="text-yellow-300">"SOLANA"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-blue-400">"safety"</span>: <span className="text-green-300">"VERIFIED"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-blue-400">"sentiment"</span>: <span className="text-green-300">"BULLISH"</span><br />
                             <span className="text-purple-400">{"}"}</span>
                         </div>
                     </div>
