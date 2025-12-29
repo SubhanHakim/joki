@@ -114,7 +114,8 @@ export default function ChatPage() {
             { id: 'gpt-4.1-mini' }, // User Chat cepat + murah
             { id: 'gpt-4.1' },      // Creative / narrative
             { id: 'o4-mini' },      // Deep reasoning / AI Agent
-            { id: 'GPT-5' }         // Top quality (mirip ChatGPT-5)
+            { id: 'GPT-5' },        // Top quality
+            { id: 'GPT-5.2' }       // Ultra/God Mode
         ]);
     }, []);
 

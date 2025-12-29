@@ -23,6 +23,7 @@ app.post("/api/terrasuck", async (req, res) => {
         else if (model === "gpt-4.1") targetModel = "gpt-4o";
         else if (model === "o4-mini") targetModel = "gpt-4o";
         else if (model === "GPT-5") targetModel = "gpt-4o";
+        else if (model === "GPT-5.2") targetModel = "gpt-4o";
         else targetModel = model || "gpt-4o";
 
         const completion = await openai.chat.completions.create({

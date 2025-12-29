@@ -23,6 +23,7 @@ const handleTerrasuck = async (req, res) => {
         else if (model === "gpt-4.1") targetModel = "gpt-4o";
         else if (model === "o4-mini") targetModel = "gpt-4o"; // Or o1-preview if available
         else if (model === "GPT-5") targetModel = "gpt-4o"; // Fallback to best available
+        else if (model === "GPT-5.2") targetModel = "gpt-4o"; // Ultra tier mapping
         else targetModel = model || "gpt-4o";
 
         const completion = await openai.chat.completions.create({
