@@ -44,7 +44,7 @@ export default function LandingPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+        <div className="min-h-screen bg-black text-white relative overflow-hidden font-sans selection:bg-indigo-500/30 selection:text-indigo-200 animate-fade-in">
 
             {/* Background - Dot Pattern */}
             <div className="fixed inset-0 z-0 opacity-20 pointer-events-none"

@@ -265,7 +265,7 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="flex h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden">
+        <div className="flex h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden animate-fade-in">
 
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && (
