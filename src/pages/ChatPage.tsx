@@ -89,7 +89,7 @@ export default function ChatPage() {
 
     // Model & System Prompt State
     const [models, setModels] = useState<any[]>([]);
-    const [selectedModel, setSelectedModel] = useState("llama-3.3-70b-versatile");
+    const [selectedModel, setSelectedModel] = useState("gpt-4.1-mini");
     const [showModelDropdown, setShowModelDropdown] = useState(false);
     const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
 
@@ -109,28 +109,13 @@ export default function ChatPage() {
     }, [input]);
 
     useEffect(() => {
-        // Fetch models on load
-        fetch('/api/models')
-            .then(res => res.json())
-            .then(response => {
-                // Handle different possible response structures
-                let list = [];
-                if (Array.isArray(response)) {
-                    list = response;
-                } else if (response && Array.isArray(response.data)) {
-                    list = response.data;
-                }
-
-                if (list.length > 0) {
-                    setModels(list);
-                } else {
-                    setModels([{ id: 'llama-3.3-70b-versatile' }]);
-                }
-            })
-            .catch(err => {
-                console.error("Failed to fetch models", err);
-                setModels([{ id: 'llama-3.3-70b-versatile' }, { id: 'mixtral-8x7b-32768' }]);
-            });
+        // Custom Model List for NEXORA
+        setModels([
+            { id: 'gpt-4.1-mini' }, // User Chat cepat + murah
+            { id: 'gpt-4.1' },      // Creative / narrative
+            { id: 'o4-mini' },      // Deep reasoning / AI Agent
+            { id: 'GPT-5' }         // Top quality (mirip ChatGPT-5)
+        ]);
     }, []);
 
     // Session Management
