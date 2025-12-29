@@ -407,14 +407,18 @@ export default function ChatPage() {
                                         Configure persona in settings.
                                     </p>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-sm md:max-w-lg">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-sm md:max-w-2xl">
                                     <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("Analyze current market sentiment")}>
                                         <div className="text-xs text-gray-500 mb-1">Command</div>
-                                        <div className="text-sm font-medium text-gray-300">Analyze market sentiment &rarr;</div>
+                                        <div className="text-sm font-medium text-gray-300">Analyze Market</div>
+                                    </div>
+                                    <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("/image ")}>
+                                        <div className="text-xs text-indigo-400 mb-1 font-bold">Creative</div>
+                                        <div className="text-sm font-medium text-gray-300">Generate Image &rarr;</div>
                                     </div>
                                     <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("Extract key entities from text")}>
                                         <div className="text-xs text-gray-500 mb-1">Task</div>
-                                        <div className="text-sm font-medium text-gray-300">Extract key entities &rarr;</div>
+                                        <div className="text-sm font-medium text-gray-300">Extract Entities</div>
                                     </div>
                                 </div>
                             </div>
@@ -527,7 +531,7 @@ export default function ChatPage() {
                                     <textarea
                                         ref={textareaRef}
                                         className="flex-1 max-h-[150px] md:max-h-[200px] m-0 w-full resize-none border-0 bg-transparent py-4 md:py-5 px-3 focus:ring-0 focus-visible:ring-0 text-gray-100 placeholder-gray-500 text-sm md:text-base scrollbar-thin scrollbar-thumb-gray-600 font-medium leading-relaxed"
-                                        placeholder={selectedImage ? "Add a caption..." : "Message NEXORA..."}
+                                        placeholder={selectedImage ? "Add a caption..." : "Message... (Try /image cyberpunk city)"}
                                         rows={1}
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}

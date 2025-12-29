@@ -19,9 +19,29 @@ const TARGET_MODEL = "gpt-5.2";
 
 const handleTerrasuck = async (req, res) => {
     try {
-        const { input, image, systemPrompt } = req.body;
+        let { input, image, systemPrompt } = req.body;
 
-        // Construct User Message (Text OR Text + Image)
+        // --- 🎨 IMAGE GENERATION MODE ---
+        if (input && typeof input === 'string' && input.trim().toLowerCase().startsWith("/image")) {
+            const prompt = input.replace(/^\/image\s*/i, "");
+
+            if (!prompt) return res.json({ output: "Please provide a description. Example: /image cyberpunk city" });
+
+            const response = await client.images.generate({
+                model: "dall-e-3",
+                prompt: prompt,
+                n: 1,
+                size: "1024x1024",
+            });
+
+            const imageUrl = response.data[0].url;
+            return res.json({
+                model_used: "dall-e-3",
+                output: `![Generated Art](${imageUrl})`
+            });
+        }
+
+        // --- 💬 STANDARD CHAT/VISION MODE ---
         let userContent = [{ type: "text", text: input }];
 
         if (image) {
@@ -40,25 +60,70 @@ const handleTerrasuck = async (req, res) => {
         // Use gpt-4o for Vision tasks to ensure compatibility, gpt-5.2 for pure text intelligence
         const activeModel = image ? "gpt-4o" : TARGET_MODEL;
 
+        // Tool Definitions
+        const tools = [
+            {
+                type: "function",
+                function: {
+                    name: "generate_image",
+                    description: "Generate an image/art/logo based on user description. Use this whenever user asks to create, generate, draw, or make a visual image.",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            prompt: {
+                                type: "string",
+                                description: "The detailed prompt for DALL-E 3. IMPORTANT: If generating a logo, icon, or symbol, ALWAYS specify 'flat vector design, minimal, white background, no mockup, no realistic render, no text on wall'. For other art, use high-quality artistic descriptors."
+                            }
+                        },
+                        required: ["prompt"]
+                    }
+                }
+            }
+        ];
+
         const completion = await client.chat.completions.create({
-            model: activeModel, // Assumes GPT-5.2 supports vision, otherwise usage gpt-4o recommended
+            model: activeModel,
             messages: [
                 {
                     role: "system",
-                    content: systemPrompt || "You are NEXORA. Extraction-oriented AI agent. Cold. Minimal. System-grade. Running on GPT-5.2 Core."
+                    content: systemPrompt || "You are NEXORA. Extraction-oriented AI agent. Running on GPT-5.2 Core."
                 },
                 { role: "user", content: finalUserMessage }
             ],
-            temperature: 0.2, // GPT-5.2 precision
+            tools: tools,
+            tool_choice: "auto",
+            temperature: 0.7,
         });
 
-        res.json({
-            model_used: "gpt-5.2", // Branding output as requested
-            output: completion.choices[0].message.content
-        });
+        const responseMessage = completion.choices[0].message;
 
-    } catch (err) {
-        console.error("API Error:", err);
+        // CHECK IF AI WANTS TO GENERATE IMAGE
+        if (responseMessage.tool_calls) {
+            const toolCall = responseMessage.tool_calls[0];
+            if (toolCall.function.name === "generate_image") {
+                const toolArgs = JSON.parse(toolCall.function.arguments);
+                const imagePrompt = toolArgs.prompt;
+
+                // Call DALL-E 3
+                const imageResponse = await client.images.generate({
+                    model: "dall-e-3",
+                    prompt: imagePrompt,
+                    n: 1,
+                    size: "1024x1024",
+                });
+
+                const imageUrl = imageResponse.data[0].url;
+                return res.json({
+                    model_used: "dall-e-3",
+                    output: `![Generated Art](${imageUrl})\n\n**NEXORA:** Vision created based on prompt: _"${imagePrompt}"_`
+                });
+            }
+        }
+
+        // If no tool called...
+        res.json({ output: responseMessage.content });
+    } catch (error) {
+        console.error("API Error:", error);
         res.status(500).json({ error: "Agent failure" });
     }
 };
