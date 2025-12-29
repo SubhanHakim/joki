@@ -67,7 +67,25 @@ const MessageContent = ({ content, isLatestAssistant }: { content: string, isLat
                                 {children}
                             </code>
                         )
-                    }
+                    },
+                    img: (props: any) => (
+                        <div className="relative group inline-block my-4">
+                            <img
+                                {...props}
+                                className="rounded-xl border border-white/10 shadow-2xl max-w-full h-auto"
+                            />
+                            <a
+                                href={props.src}
+                                download={`nexora_art_${Date.now()}.png`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="absolute top-3 right-3 bg-black/60 hover:bg-indigo-600 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all backdrop-blur-md border border-white/20 shadow-lg"
+                                title="Download High-Res"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            </a>
+                        </div>
+                    )
                 }}
             >
                 {content}
