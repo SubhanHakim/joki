@@ -44,10 +44,10 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 py-4 w-full max-w-[1400px] mx-auto">
                 <div className="flex items-center gap-3 relative z-50 group">
                     <div className="h-10 w-10 md:h-12 md:w-12 border border-gray-200 p-0.5 bg-gray-50 transition-transform group-hover:scale-105">
-                        <img src={mascot} alt="JOKI" className="h-full w-full object-cover transition-all font-mono" />
+                        <img src={mascot} alt="ZYKO" className="h-full w-full object-cover transition-all font-mono" />
                     </div>
                     <div className="flex flex-col justify-center h-full">
-                        <span className="font-bold text-xl tracking-tighter text-black leading-none">JOKI</span>
+                        <span className="font-bold text-xl tracking-tighter text-black leading-none">ZYKO</span>
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@ export default function Navbar() {
                         onClick={handleEnterTerminal}
                         className="bg-green-600 text-white px-6 py-2 text-xs font-bold font-mono tracking-wider hover:bg-green-700 transition-all duration-200 flex items-center gap-2 border border-green-600 clip-path-slant shadow-sm"
                     >
-                        INITIALIZE_JOKI
+                        INITIALIZE_ZYKO
                     </button>
                 </div>
 
@@ -88,8 +88,8 @@ export default function Navbar() {
                 {/* Mobile Menu Logo */}
                 <div className={`absolute top-8 left-6 transition-all duration-700 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 -translate-y-4 delay-0'}`}>
                     <div className="flex items-center gap-2">
-                        <img src={mascot} alt="JOKI" className="h-10 w-10 rounded-full border border-gray-200" />
-                        <span className="font-black text-black text-2xl tracking-tighter">JOKI</span>
+                        <img src={mascot} alt="ZYKO" className="h-10 w-10 rounded-full border border-gray-200" />
+                        <span className="font-black text-black text-2xl tracking-tighter">ZYKO</span>
                     </div>
                 </div>
 
@@ -114,7 +114,7 @@ export default function Navbar() {
                             onClick={() => { setIsMobileMenuOpen(false); handleEnterTerminal(); }}
                             className="bg-white text-black px-12 py-4 text-xl rounded-full font-black shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition-transform"
                         >
-                            START JOKI
+                            START ZYKO
                         </button>
                     </div>
                 </div>

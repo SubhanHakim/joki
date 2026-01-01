@@ -270,7 +270,7 @@ export default function ChatPage() {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-gray-900"></div>
-                            <span className="font-black text-xl text-gray-900 tracking-tighter">JOKI</span>
+                            <span className="font-black text-xl text-gray-900 tracking-tighter">ZYKO</span>
                         </div>
                         <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-900">
                             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -425,7 +425,7 @@ export default function ChatPage() {
                                     </div>
                                     <div className="relative flex-1 overflow-hidden min-w-0">
                                         <div className="text-[10px] text-gray-400 font-mono font-bold mb-2 uppercase flex items-center gap-2">
-                                            {msg.role === 'user' ? 'OPERATOR' : 'JOKI_UNIT'}
+                                            {msg.role === 'user' ? 'OPERATOR' : 'ZYKO_UNIT'}
                                             <span className="w-full h-px bg-gray-200"></span>
                                         </div>
                                         {msg.role === 'user' ? (

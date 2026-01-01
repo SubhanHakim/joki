@@ -9,10 +9,10 @@ export default function Footer() {
                     {/* Brand & Mascot */}
                     <div className="flex items-center gap-4">
                         <div className="relative w-12 h-12 rounded-full border-2 border-gray-900 overflow-hidden">
-                            <img src={mascot} alt="Joki Mascot" className="w-full h-full object-cover" />
+                            <img src={mascot} alt="Zyko Mascot" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-black text-xl tracking-tighter text-gray-900 leading-none">JOKI</span>
+                            <span className="font-black text-xl tracking-tighter text-gray-900 leading-none">ZYKO</span>
                             <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">Autonomous Unit</span>
                         </div>
                     </div>
@@ -27,7 +27,7 @@ export default function Footer() {
                             <span className="font-mono text-xs font-bold text-gray-900">SYSTEM ONLINE</span>
                         </div>
                         <span className="font-mono text-[10px] text-gray-400 uppercase">
-                            © 2025 JOKI INC. ALL RIGHTS RESERVED.
+                            © 2025 ZYKO INC. ALL RIGHTS RESERVED.
                         </span>
                     </div>
                 </div>

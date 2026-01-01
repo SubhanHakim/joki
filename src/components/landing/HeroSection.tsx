@@ -43,7 +43,7 @@ export default function HeroSection() {
 
                     <div className="relative lg:pl-8 lg:border-l-4 border-gray-900">
                         <p className="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-xl font-bold leading-tight mx-auto lg:mx-0 text-center lg:text-left">
-                            <span className="bg-gray-900 text-white px-1">JOKI</span> executes your creative concepts.
+                            <span className="bg-gray-900 text-white px-1">ZYKO</span> executes your creative concepts.
                         </p>
                         <p className="text-gray-500 mt-2 font-mono text-sm max-w-md mx-auto lg:mx-0 text-center lg:text-left">
                             {'>'} We draft, write, and optimize. <br />
@@ -61,7 +61,7 @@ export default function HeroSection() {
                             className="relative group px-8 py-4 bg-green-500 text-black font-bold text-lg tracking-wider overflow-hidden hover:bg-green-400 transition-colors clip-path-slant"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                INITIALIZE_JOKI
+                                INITIALIZE_ZYKO
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                             </span>
                         </button>
@@ -91,7 +91,7 @@ export default function HeroSection() {
                         <div className="flex justify-between items-center p-4 border-b-2 border-gray-100 mb-2">
                             <div className="flex flex-col">
                                 <span className="text-[9px] font-mono text-gray-400 tracking-widest uppercase">Operative Identifier</span>
-                                <span className="text-2xl font-black font-mono tracking-tighter text-gray-900">JK-88</span>
+                                <span className="text-2xl font-black font-mono tracking-tighter text-gray-900">ZK-88</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -104,7 +104,7 @@ export default function HeroSection() {
                         {/* ID Image */}
                         <div className="relative aspect-square w-full overflow-hidden bg-gray-50 mb-2 border border-gray-100">
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-10"></div>
-                            <img src={mascot} alt="JOKI AGENT" className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700" />
+                            <img src={mascot} alt="ZYKO AGENT" className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700" />
 
                             {/* Overlay UI */}
                             <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
