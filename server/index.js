@@ -14,118 +14,57 @@ const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Single Model Focus: The Real GPT-5.2
-const TARGET_MODEL = "gpt-5.2";
+// Utility Modes System Prompts
+const SYSTEM_PROMPTS = {
+    project: `You are an AI Project Assistant focused on structure and clarity.
+    Task: Help the user draft ideas, roadmaps, technical stacks, and project features.
+    Style: Direct, structured (use bullet points/markdown), professional.
+    Goal: Transform abstract ideas into concrete, actionable plans.`,
 
-app.post("/api/terrasuck", async (req, res) => {
+    content: `You are a professional AI Content & Copywriter.
+    Task: Write marketing content, product descriptions, or technical articles.
+    Style: Engaging, persuasive, grammatically correct, tailored to the target audience.
+    Goal: Produce ready-to-publish text.`,
+
+    prompt: `You are an AI Prompt Engineer Expert.
+    Task: Analyze and optimize user prompts for LLMs.
+    Method: Use techniques like Chain-of-Thought (CoT), Few-Shot, or Role-Playing.
+    Goal: Provide a significantly improved version of the prompt and explain the improvements made.`
+};
+
+app.post("/api/chat", async (req, res) => {
     try {
-        let { input, image, systemPrompt } = req.body;
+        const { message, mode } = req.body;
 
-        // --- 🎨 IMAGE GENERATION MODE ---
-        if (input.trim().toLowerCase().startsWith("/image")) {
-            const prompt = input.replace(/^\/image\s*/i, ""); // Remove "/image" prefix
-
-            if (!prompt) return res.json({ output: "Please provide a description. Example: /image cyberpunk city" });
-
-            const response = await client.images.generate({
-                model: "dall-e-3",
-                prompt: prompt,
-                n: 1,
-                size: "1024x1024",
-                quality: "standard", // standard or hd
-            });
-
-            const imageUrl = response.data[0].url;
-
-            // Return as Markdown Image syntax
-            return res.json({
-                model_used: "dall-e-3",
-                output: `![Generated Image](${imageUrl})\n\n**Server:** Image generation complete.`
-            });
+        // 1. Validation
+        if (!message || typeof message !== 'string') {
+            const errorMsg = "Message is required and must be a string.";
+            console.error("API Error: ", errorMsg);
+            return res.status(400).json({ error: errorMsg });
         }
 
-        // --- 💬 STANDARD CHAT/VISION MODE ---
-        let userContent = [{ type: "text", text: input }];
+        // 2. Mode Selection
+        // Strict mode selection based on allowed keys
+        const selectedMode = (mode && SYSTEM_PROMPTS[mode]) ? mode : 'project';
+        const systemInstruction = SYSTEM_PROMPTS[selectedMode];
 
-        if (image) {
-            userContent.push({
-                type: "image_url",
-                image_url: {
-                    url: image,
-                    detail: "auto"
-                }
-            });
-        }
+        console.log(`Processing Request - Mode: ${selectedMode}`);
 
-        const finalUserMessage = image ? userContent : input;
-
-        // Use gpt-4o for Vision tasks to ensure compatibility, gpt-5.2 for pure text intelligence
-        const activeModel = image ? "gpt-4o" : TARGET_MODEL;
-
-        // Define Tools
-        const tools = [
-            {
-                type: "function",
-                function: {
-                    name: "generate_image",
-                    description: "Generate an image/art/logo based on user description. Use this whenever user asks to create, generate, draw, or make a visual image.",
-                    parameters: {
-                        type: "object",
-                        properties: {
-                            prompt: {
-                                type: "string",
-                                description: "The detailed prompt for DALL-E 3. IMPORTANT: If generating a logo, icon, or symbol, ALWAYS specify 'flat vector design, minimal, white background, no mockup, no realistic render, no text on wall'. For other art, use high-quality artistic descriptors."
-                            }
-                        },
-                        required: ["prompt"]
-                    }
-                }
-            }
-        ];
-
+        // 3. OpenAI Call
         const completion = await client.chat.completions.create({
-            model: activeModel,
+            model: "gpt-4o",
             messages: [
-                {
-                    role: "system",
-                    content: systemPrompt || "You are NEXORA. Extraction-oriented AI agent. Running on GPT-5.2 Core."
-                },
-                { role: "user", content: finalUserMessage }
+                { role: "system", content: systemInstruction },
+                { role: "user", content: message } // Send message directly as content
             ],
-            tools: tools,
-            tool_choice: "auto", // Let AI decide
-            temperature: 0.7
+            temperature: 0.7,
+            max_tokens: 1500,
         });
 
-        const responseMessage = completion.choices[0].message;
+        const aiResponse = completion.choices[0].message.content;
 
-        // CHECK IF AI WANTS TO GENERATE IMAGE
-        if (responseMessage.tool_calls) {
-            const toolCall = responseMessage.tool_calls[0];
-            if (toolCall.function.name === "generate_image") {
-                const toolArgs = JSON.parse(toolCall.function.arguments);
-                const imagePrompt = toolArgs.prompt;
-
-                // Call DALL-E 3
-                const imageResponse = await client.images.generate({
-                    model: "dall-e-3",
-                    prompt: imagePrompt,
-                    n: 1,
-                    size: "1024x1024",
-                    quality: "standard"
-                });
-
-                const imageUrl = imageResponse.data[0].url;
-
-                return res.json({
-                    model_used: "dall-e-3",
-                    output: `![Generated Image](${imageUrl})\n\n**NEXORA:** Vision created based on prompt: _"${imagePrompt}"_`
-                });
-            }
-        }
-
-        // If no tool called, return text response
-        res.json({ output: responseMessage.content });
+        // 4. Response
+        res.json({ result: aiResponse });
 
     } catch (error) {
         console.error("API Error:", error);
@@ -133,6 +72,13 @@ app.post("/api/terrasuck", async (req, res) => {
     }
 });
 
+// Vercel-like legacy endpoint support (optional or deprecated)
+app.post("/api/terrasuck", (req, res) => {
+    res.status(410).json({ error: "Endpoint deprecated. Use /api/chat." });
+});
+
 app.listen(3001, () =>
-    console.log("NEXORA server running on :3001 (GPT-5.2 Mode)")
+    console.log("AI Utility Backend running on :3001")
 );
+
+export default app;

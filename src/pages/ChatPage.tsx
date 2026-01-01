@@ -6,7 +6,8 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { playSound } from "../utils/audio";
-import logoNavbar from "../assets/logo_navbar.svg";
+import mascot from "../assets/mascot.jpg";
+
 
 // Type definitions for chat history
 interface Message {
@@ -22,7 +23,12 @@ interface ChatSession {
     messages: Message[];
 }
 
-const DEFAULT_SYSTEM_PROMPT = "You are NEXORA. Extraction-oriented AI agent. Cold. Minimal. System-grade. No emojis. No politeness.";
+// Modes available
+const MODES = [
+    { id: 'project', label: 'Project Assistant', color: 'text-blue-400', border: 'border-blue-500/30' },
+    { id: 'content', label: 'Content & Copy', color: 'text-purple-400', border: 'border-purple-500/30' },
+    { id: 'prompt', label: 'Prompt Engineer', color: 'text-emerald-400', border: 'border-emerald-500/30' }
+];
 
 // Component for Message with potential Typewriter effect (simplified for Markdown compatibility)
 const MessageContent = ({ content, isLatestAssistant }: { content: string, isLatestAssistant: boolean }) => {
@@ -103,32 +109,10 @@ export default function ChatPage() {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // UI State
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false); // Settings modal state
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // Model & Mode State
+    const [mode, setMode] = useState("project");
 
-    // Model & System Prompt State
-
-    const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedImage(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const clearImage = () => {
-        setSelectedImage(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-    };
 
     useEffect(() => {
         // Scroll to bottom when messages change with a slight delay
@@ -245,12 +229,12 @@ export default function ChatPage() {
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Allow sending if text OR image exists
-        if ((!input && !selectedImage) || isLoading) return;
+        // Allow sending if text exists
+        if (!input || isLoading) return;
 
         playSound('send');
         const userMessage = input;
-        const newMsg: Message = { role: 'user', content: userMessage, attachment: selectedImage };
+        const newMsg: Message = { role: 'user', content: userMessage };
         const newHistoryUser = [...messages, newMsg];
 
         let activeSessionId = currentSessionId;
@@ -265,10 +249,9 @@ export default function ChatPage() {
         setIsLoading(true);
 
         try {
-            const output = await terrasuck(userMessage, selectedImage, systemPrompt);
-            clearImage();
+            const result = await terrasuck(userMessage, mode);
             playSound('receive');
-            const newHistoryAssistant = [...newHistoryUser, { role: 'assistant', content: output } as Message];
+            const newHistoryAssistant = [...newHistoryUser, { role: 'assistant', content: result } as Message];
             setMessages(newHistoryAssistant);
             updateSession(activeSessionId, newHistoryAssistant);
         } catch (error) {
@@ -282,7 +265,7 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="flex h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden animate-fade-in">
+        <div className="flex h-screen bg-gray-50 text-gray-900 font-sans selection:bg-green-100 selection:text-green-900 overflow-hidden animate-fade-in">
 
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && (
@@ -291,14 +274,15 @@ export default function ChatPage() {
 
             {/* Sidebar - Mobile & Desktop */}
             <aside className={`
-          fixed inset-y-0 left-0 z-50 w-[280px] bg-[#050505] border-r border-white/5 
+          fixed inset-y-0 left-0 z-50 w-[280px] bg-white border-r border-gray-200 
           transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-                <div className="p-4 flex items-center justify-between">
-                    <a href="/" className="flex items-center gap-2 group">
-                        <img src={logoNavbar} alt="NEXORA" className="h-8 w-auto opacity-80 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                <div className="p-4 flex items-center justify-between border-b border-gray-100">
+                    <div className="flex flex-col">
+                        <span className="font-bold text-xl text-gray-900 tracking-widest font-mono">JOKI_OS</span>
+                        <span className="text-[10px] text-green-600 font-mono">READY</span>
+                    </div>
                     <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-500">
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
@@ -307,16 +291,16 @@ export default function ChatPage() {
                 <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-800">
                     <button
                         onClick={createNewSession}
-                        className="w-full text-left px-3 py-3 rounded-lg flex items-center gap-3 hover:bg-white/5 transition-colors text-sm text-gray-300 mb-6 border border-white/10 hover:border-orange-500/30 group"
+                        className="w-full text-left px-3 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-50 transition-colors text-sm text-gray-600 mb-6 border border-gray-200 hover:border-green-500/30 group"
                     >
-                        <div className="w-5 h-5 rounded-full border border-gray-500 group-hover:border-indigo-500 flex items-center justify-center text-xs group-hover:text-indigo-500 transition-colors">+</div>
-                        New Extraction
+                        <div className="w-5 h-5 rounded-full border border-gray-400 group-hover:border-green-500 flex items-center justify-center text-xs group-hover:text-green-600 transition-colors">+</div>
+                        New Chat
                     </button>
 
                     <div className="flex items-center justify-between px-3 py-2 mb-2">
                         <div className="text-xs font-bold text-gray-600 uppercase tracking-widest">History</div>
                         {messages.length > 0 && (
-                            <button onClick={exportSession} title="Export Current Log" className="text-xs text-gray-600 hover:text-indigo-500">
+                            <button onClick={exportSession} title="Export Current Log" className="text-xs text-gray-600 hover:text-green-500">
                                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                             </button>
                         )}
@@ -328,8 +312,8 @@ export default function ChatPage() {
                                 <button
                                     onClick={() => loadSession(session)}
                                     className={`w-full text-left px-3 py-2.5 rounded text-sm transition-all truncate pr-8 ${currentSessionId === session.id
-                                        ? 'bg-white/10 text-white shadow-inner'
-                                        : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
+                                        ? 'bg-green-50 text-green-700 shadow-sm border border-green-100'
+                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                                         }`}
                                 >
                                     {session.title || "Untitled Session"}
@@ -348,17 +332,17 @@ export default function ChatPage() {
                     </div>
                 </div>
 
-                <div className="p-4 border-t border-white/5 space-y-4">
+                <div className="p-4 border-t border-gray-200 space-y-4">
                     {/* User Info */}
-                    <div className="flex items-center gap-3 px-2 py-2 rounded hover:bg-white/5 cursor-pointer transition-colors">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-600 to-blue-600 flex items-center justify-center text-xs font-bold ring-2 ring-transparent group-hover:ring-indigo-500/50">
+                    <div className="flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-50 cursor-pointer transition-colors">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center text-xs font-bold ring-2 ring-transparent group-hover:ring-green-500/50 text-gray-700">
                             OP
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <div className="text-sm font-medium truncate text-gray-300">
+                            <div className="text-sm font-medium truncate text-gray-700">
                                 Operator
                             </div>
-                            <div className="text-xs text-green-500 flex items-center gap-1.5">
+                            <div className="text-xs text-green-600 flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                                 Guest Access
                             </div>
@@ -371,7 +355,7 @@ export default function ChatPage() {
             </aside>
 
             {/* Main Chat Area */}
-            <main className="flex-1 flex flex-col relative h-full bg-black w-full">
+            <main className="flex-1 flex flex-col relative h-full bg-gray-50 w-full">
 
                 {/* Top Header Floating - Mobile Optimized */}
                 <div className="absolute top-0 left-0 right-0 p-3 md:p-4 flex justify-between items-center z-20 pointer-events-none">
@@ -385,25 +369,22 @@ export default function ChatPage() {
                         </button>
                     </div>
 
-                    {/* Center: Model Selector (Fixed) */}
-                    <div className="mx-auto bg-[#1a1a1a]/95 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 flex items-center gap-2 md:gap-3 shadow-2xl pointer-events-auto relative z-50">
-                        <span className="text-xs md:text-sm font-medium text-white flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                            NEXORA-1.0
-                        </span>
-                        <div className="h-3 w-px bg-white/10 hidden sm:block"></div>
-                        <span className="text-[10px] text-orange-500 font-bold tracking-widest px-1 hidden sm:inline">GOD MODE</span>
+                    {/* Center: Mode Selector */}
+                    <div className="mx-auto bg-white/80 backdrop-blur-md px-2 py-1.5 rounded-full border border-gray-200 flex items-center gap-1 shadow-lg pointer-events-auto relative z-50">
+                        {MODES.map((m) => (
+                            <button
+                                key={m.id}
+                                onClick={() => setMode(m.id)}
+                                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${mode === m.id ? 'bg-gray-900 text-white shadow-md ' : 'text-gray-500 hover:text-gray-900'}`}
+                            >
+                                {m.label}
+                            </button>
+                        ))}
                     </div>
 
-                    {/* Right Side: Settings & Wallet */}
-                    <div className="pointer-events-auto flex items-center gap-2 ml-2 flex-shrink-0">
-                        <button
-                            onClick={() => setIsSettingsOpen(true)}
-                            className="p-2 bg-[#1a1a1a]/80 backdrop-blur rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-indigo-500/30 transition-all active:scale-95"
-                        >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                        </button>
-
+                    {/* Right Side: Spacer */}
+                    <div className="pointer-events-auto flex items-center gap-2 ml-2 flex-shrink-0 w-8">
+                        {/* Placeholder to balance layout if needed, or keeping empty */}
                     </div>
                 </div>
 
@@ -415,28 +396,29 @@ export default function ChatPage() {
                         {/* Empty State ... (No changes needed logic wise, just existing structure) */}
                         {messages.length === 0 && (
                             <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 opacity-40 select-none px-4 min-h-[50vh]">
-                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/5 flex items-center justify-center mb-4 border border-white/5">
-                                    <span className="text-4xl md:text-5xl text-gray-500">❖</span>
+                                <div className="w-32 h-32 border border-gray-200 p-2 bg-white rotate-3 hover:rotate-0 transition-transform duration-300 mb-4 shadow-lg">
+                                    <div className="w-full h-full overflow-hidden grayscale hover:grayscale-0 transition-all">
+                                        <img src={mascot} alt="AI Assistant" className="w-full h-full object-cover" />
+                                    </div>
                                 </div>
                                 <div>
-                                    <h2 className="text-xl md:text-2xl font-bold tracking-tight mb-2">System Ready</h2>
+                                    <h2 className="text-xl md:text-2xl font-black tracking-tight mb-2 text-gray-900">JOKI <span className="text-green-600">ONLINE</span></h2>
                                     <p className="max-w-xs md:max-w-md text-sm md:text-base text-gray-400 mx-auto leading-relaxed">
-                                        Awaiting input from node <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 font-mono font-bold">GUEST_NODE_01</span>.
-                                        Configure persona in settings.
+                                        Select a mode above. I handle the rest.
                                     </p>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-sm md:max-w-2xl">
-                                    <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("Analyze current market sentiment")}>
-                                        <div className="text-xs text-gray-500 mb-1">Command</div>
-                                        <div className="text-sm font-medium text-gray-300">Analyze Market</div>
+                                    <div className="p-3 border border-gray-200 bg-white rounded hover:border-green-500/50 hover:bg-green-50 transition-colors cursor-pointer" onClick={() => { setMode('project'); setInput("Help me draft a startup idea..."); }}>
+                                        <div className="text-xs text-blue-600 mb-1 font-bold">Project</div>
+                                        <div className="text-sm font-medium text-gray-600">Draft AI Concept</div>
                                     </div>
-                                    <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("/image ")}>
-                                        <div className="text-xs text-indigo-400 mb-1 font-bold">Creative</div>
-                                        <div className="text-sm font-medium text-gray-300">Generate Image &rarr;</div>
+                                    <div className="p-3 border border-gray-200 bg-white rounded hover:border-green-500/50 hover:bg-green-50 transition-colors cursor-pointer" onClick={() => { setMode('content'); setInput("Create a Twitter caption for launching..."); }}>
+                                        <div className="text-xs text-purple-600 mb-1 font-bold">Content</div>
+                                        <div className="text-sm font-medium text-gray-600">Create Copywriting</div>
                                     </div>
-                                    <div className="p-3 border border-white/10 rounded hover:border-indigo-500/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setInput("Extract key entities from text")}>
-                                        <div className="text-xs text-gray-500 mb-1">Task</div>
-                                        <div className="text-sm font-medium text-gray-300">Extract Entities</div>
+                                    <div className="p-3 border border-gray-200 bg-white rounded hover:border-green-500/50 hover:bg-green-50 transition-colors cursor-pointer" onClick={() => { setMode('prompt'); setInput("Optimize this prompt: ..."); }}>
+                                        <div className="text-xs text-emerald-600 mb-1 font-bold">Prompt</div>
+                                        <div className="text-sm font-medium text-gray-600">Refine Prompt</div>
                                     </div>
                                 </div>
                             </div>
@@ -446,30 +428,25 @@ export default function ChatPage() {
                             <div key={i} className={`group w-full text-gray-100`}>
                                 <div className="flex gap-3 md:gap-6 p-2 md:p-0 text-sm md:text-base m-auto md:max-w-3xl">
                                     <div className={`flex-shrink-0 flex flex-col relative items-end pt-1`}>
-                                        <div className={`relative h-6 w-6 md:h-8 md:w-8 rounded-lg flex items-center justify-center shadow-lg ${msg.role === 'assistant'
-                                            ? 'bg-gradient-to-br from-red-600 to-blue-600'
-                                            : 'bg-gradient-to-br from-gray-800 to-black border border-gray-700'
+                                        <div className={`relative h-10 w-10 md:h-12 md:w-12 border items-center justify-center p-0.5 shadow-sm overflow-hidden ${msg.role === 'assistant'
+                                            ? 'border-green-500/50 bg-white'
+                                            : 'bg-gray-200 border-gray-300'
                                             }`}>
                                             {msg.role === 'assistant' ?
-                                                <svg className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                                                <img src={mascot} alt="AI" className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-300" />
                                                 :
-                                                <div className="w-full h-full rounded-lg overflow-hidden bg-black flex items-center justify-center">
-                                                    <div className="w-3 h-3 md:w-4 md:h-4 bg-purple-500 rounded-full blur-[2px]"></div>
+                                                <div className="w-full h-full bg-gray-100 flex items-center justify-center font-mono text-xs text-gray-500">
+                                                    OP
                                                 </div>
                                             }
                                         </div>
                                     </div>
                                     <div className="relative flex-1 overflow-hidden min-w-0">
                                         {msg.role === 'user' ? (
-                                            <div className="font-medium text-gray-200">
-                                                <div className="text-[10px] text-gray-500 font-mono mb-1">
-                                                    GUEST_NODE
+                                            <div className="font-medium text-gray-800">
+                                                <div className="text-[10px] text-gray-400 font-mono mb-1">
+                                                    USER
                                                 </div>
-                                                {msg.attachment && (
-                                                    <div className="mb-2">
-                                                        <img src={msg.attachment} alt="Attachment" className="max-h-48 md:max-h-64 rounded-xl border border-white/10 shadow-lg object-contain" />
-                                                    </div>
-                                                )}
                                                 {msg.content && <div className="whitespace-pre-wrap break-words">{msg.content}</div>}
                                             </div>
                                         ) : (
@@ -504,77 +481,37 @@ export default function ChatPage() {
                         <div className="relative group">
                             <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500/20 to-blue-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-1000"></div>
 
-                            <form onSubmit={submit} className="relative flex flex-col w-full bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl focus-within:border-indigo-500/40 focus-within:bg-[#1f1f1f] transition-all overflow-hidden">
+                            <form onSubmit={submit} className="relative flex flex-col w-full bg-white border border-gray-200 focus-within:border-green-500 transition-colors overflow-hidden shadow-xl">
+                                <span className="absolute top-0 right-0 p-1 text-[8px] font-mono text-gray-400">INPUT_STREAM</span>
 
-                                {/* Image Preview Integrated */}
-                                {selectedImage && (
-                                    <div className="p-3 pb-0 animate-fade-in-up">
-                                        <div className="relative inline-block group/preview">
-                                            <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-lg">
-                                                <img src={selectedImage} alt="Preview" className="h-16 md:h-20 w-auto object-cover bg-black/50" />
-                                                <div className="absolute inset-0 bg-black/0 group-hover/preview:bg-black/20 transition-all"></div>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={clearImage}
-                                                className="absolute -top-2 -right-2 bg-black/50 hover:bg-red-500 text-white backdrop-blur border border-white/20 rounded-full p-1 shadow-lg transform scale-90 group-hover/preview:scale-100 transition-all opacity-0 group-hover/preview:opacity-100"
-                                            >
-                                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
+                                <textarea
+                                    ref={textareaRef}
+                                    className="flex-1 max-h-[150px] md:max-h-[200px] m-0 w-full resize-none border-0 bg-transparent py-4 md:py-6 px-4 focus:ring-0 focus-visible:ring-0 text-gray-900 placeholder-gray-400 text-sm md:text-base font-mono font-medium leading-relaxed"
+                                    placeholder="> Enter command to JOKI..."
+                                    rows={1}
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            submit(e as any);
+                                        }
+                                    }}
+                                />
 
-                                <div className="flex items-end w-full">
-
-                                    {/* Attach Button */}
-                                    <div className="pl-3 pb-3 md:pb-4">
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            onChange={handleImageUpload}
-                                            accept="image/*"
-                                            className="hidden"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className={`p-2 rounded-xl transition-all duration-300 transform active:scale-95 hover:bg-white/10 ${selectedImage ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}
-                                            title="Attach Image"
-                                        >
-                                            <svg className="w-6 h-6 transform -rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                                        </button>
-                                    </div>
-
-                                    <textarea
-                                        ref={textareaRef}
-                                        className="flex-1 max-h-[150px] md:max-h-[200px] m-0 w-full resize-none border-0 bg-transparent py-4 md:py-5 px-3 focus:ring-0 focus-visible:ring-0 text-gray-100 placeholder-gray-500 text-sm md:text-base scrollbar-thin scrollbar-thumb-gray-600 font-medium leading-relaxed"
-                                        placeholder={selectedImage ? "Add a caption..." : "Message... (Try /image cyberpunk city)"}
-                                        rows={1}
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' && !e.shiftKey) {
-                                                e.preventDefault();
-                                                submit(e as any);
-                                            }
-                                        }}
-                                    />
-
-                                    {/* Send Button */}
-                                    <div className="pr-3 pb-3 md:pb-4">
-                                        <button
-                                            disabled={(!input && !selectedImage) || isLoading}
-                                            type="submit"
-                                            className={`p-2 rounded-xl transition-all duration-300 ${(!input && !selectedImage) || isLoading ? 'text-gray-600 bg-transparent' : 'text-white bg-white/10 hover:bg-white/20'}`}
-                                        >
-                                            {isLoading ? (
-                                                <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                            ) : (
-                                                <svg className="w-5 h-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                                            )}
-                                        </button>
-                                    </div>
+                                {/* Send Button */}
+                                <div className="absolute right-2 bottom-3">
+                                    <button
+                                        disabled={!input || isLoading}
+                                        type="submit"
+                                        className={`px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase border transition-all duration-300 ${!input || isLoading ? 'text-gray-700 border-transparent' : 'text-black bg-green-400 border-green-500 hover:bg-green-300'}`}
+                                    >
+                                        {isLoading ? (
+                                            "EXE..."
+                                        ) : (
+                                            "ENTER"
+                                        )}
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -585,48 +522,6 @@ export default function ChatPage() {
                 </div>
 
             </main>
-
-            {/* Settings Modal */}
-            {isSettingsOpen && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-[#111] border border-white/10 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-                        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
-                            <h3 className="font-bold text-gray-200">System Configuration</h3>
-                            <button onClick={() => setIsSettingsOpen(false)} className="text-gray-500 hover:text-white">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Agent Persona (System Prompt)</label>
-                                <textarea
-                                    className="w-full h-32 bg-black border border-white/10 rounded-lg p-3 text-sm text-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none resize-none transition-all"
-                                    value={systemPrompt}
-                                    onChange={(e) => setSystemPrompt(e.target.value)}
-                                    placeholder="Define how the AI should behave..."
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2 pt-2">
-                                <button
-                                    onClick={() => setSystemPrompt(DEFAULT_SYSTEM_PROMPT)}
-                                    className="px-4 py-2 rounded-lg text-xs font-medium text-gray-500 hover:bg-white/5 transition-colors"
-                                >
-                                    Reset to Default
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setIsSettingsOpen(false);
-                                        playSound('click');
-                                    }}
-                                    className="px-4 py-2 rounded-lg text-xs font-bold bg-gradient-to-r from-red-600 to-blue-600 text-white hover:opacity-90 transition-colors shadow-lg shadow-indigo-900/20"
-                                >
-                                    Save Changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
 
         </div>
     );

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import mascot from '../../assets/mascot.jpg';
 
 export default function WorkflowVisualizer() {
     const [step, setStep] = useState(0);
@@ -6,89 +7,133 @@ export default function WorkflowVisualizer() {
     // Animation loop for the visualization
     useEffect(() => {
         const interval = setInterval(() => {
-            setStep((prev) => (prev + 1) % 4); // 4 steps logic
-        }, 2000);
+            setStep((prev) => (prev + 1) % 4);
+        }, 2500);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div id="code" className="mt-20 w-full max-w-5xl mx-auto px-4">
-            <div className="relative p-8 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl overflow-hidden min-h-[400px] flex flex-col items-center justify-center">
-
-                {/* Background Gradients */}
-                <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-600/20 rounded-full blur-[100px] -z-10" />
-                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[100px] -z-10" />
-
-                {/* Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center w-full z-10">
-
-                    {/* Step 1: Raw Input */}
-                    <div className={`relative p-6 rounded-xl border transition-all duration-700 ${step === 0 || step === 3 ? 'border-indigo-500/50 bg-indigo-900/10 shadow-[0_0_30px_rgba(99,102,241,0.2)]' : 'border-white/5 bg-white/5 opacity-50'}`}>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className={`p-2 rounded-lg ${step === 0 ? 'bg-indigo-500 text-white' : 'bg-white/10 text-gray-400'}`}>
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                            </div>
-                            <h3 className="text-sm font-bold text-gray-200">Raw Input</h3>
-                        </div>
-                        <div className="space-y-2">
-                            <div className="h-2 w-3/4 bg-white/10 rounded animate-pulse" />
-                            <div className="h-2 w-full bg-white/10 rounded animate-pulse delay-75" />
-                            <div className="h-2 w-5/6 bg-white/10 rounded animate-pulse delay-150" />
-                        </div>
-                        <div className="mt-4 text-xs font-mono text-gray-500 leading-relaxed">
-                            <span className="text-gray-600">&gt;</span> Monitoring solana_new_pairs...<br />
-                            <span className="text-green-500/50">&gt;</span> "Found $NEXORA launching. CA verified. Sending it! 🚀"
-                        </div>
+        <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-24 relative">
+            {/* Section Header */}
+            <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+                <div>
+                    <h2 className="text-sm font-mono text-green-600 font-bold tracking-[0.3em] uppercase mb-1">
+                        How_It_Works
+                    </h2>
+                    <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter uppercase leading-[0.9]">
+                        Workflow<br />Visualized
+                    </h2>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="text-right">
+                        <span className="block font-mono text-xs font-bold text-gray-900">AUTO-MODE</span>
+                        <span className="block font-mono text-[10px] text-gray-400">SEQUENCE: ACTIVE</span>
                     </div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+            </div>
 
-                    {/* Step 2: Processing (Center) */}
-                    <div className="flex flex-col items-center justify-center relative">
-                        {/* Connecting Lines (Desktop) */}
-                        <div className="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-white/5 -z-10">
-                            <div className={`absolute top-0 left-0 h-full w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent transition-all duration-1000 ${step === 1 ? 'opacity-100 translate-x-full' : 'opacity-0 -translate-x-full'}`} />
-                        </div>
+            {/* Main Visualizer Box - Swiss Industrial Style */}
+            <div className="relative border-2 border-gray-900 bg-white">
 
-                        {/* Arrows (Mobile) */}
-                        <div className="md:hidden py-4 text-gray-600">
-                            <svg className="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-                        </div>
-
-                        <div className={`relative z-10 w-24 h-24 rounded-full border flex items-center justify-center transition-all duration-500 ${step === 1 ? 'border-indigo-500 bg-indigo-900/20 scale-110 shadow-[0_0_50px_rgba(99,102,241,0.4)]' : 'border-white/10 bg-black scale-100'}`}>
-                            <div className={`absolute inset-0 rounded-full border-t-2 border-indigo-500 ${step === 1 ? 'animate-spin' : 'hidden'}`} />
-                            <svg className={`w-10 h-10 transition-colors ${step === 1 ? 'text-white' : 'text-gray-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M3.343 19.05l1.414-1.414M18.364 19.05l-1.414-1.414M20.657 5.343l-1.414-1.414" /></svg>
-                        </div>
-                        <div className="mt-4 text-xs font-mono tracking-widest text-indigo-400 uppercase">
-                            {step === 1 ? 'Analysing CA...' : 'Nexora AI'}
-                        </div>
-                    </div>
-
-                    {/* Step 3: Structured Output */}
-                    <div className={`relative p-6 rounded-xl border transition-all duration-700 ${step === 2 || step === 3 ? 'border-green-500/50 bg-green-900/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]' : 'border-white/5 bg-white/5 opacity-50'}`}>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className={`p-2 rounded-lg ${step === 2 || step === 3 ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-400'}`}>
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </div>
-                            <h3 className="text-sm font-bold text-gray-200">Alpha Signal</h3>
-                        </div>
-                        <div className="font-mono text-[10px] md:text-xs text-green-400 bg-black/50 p-3 rounded-lg border border-white/5 shadow-inner">
-                            <span className="text-purple-400">{"{"}</span><br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"token"</span>: <span className="text-yellow-300">"$NEXORA"</span>,<br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"network"</span>: <span className="text-yellow-300">"SOLANA"</span>,<br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"safety"</span>: <span className="text-green-300">"VERIFIED"</span>,<br />
-                            &nbsp;&nbsp;<span className="text-blue-400">"sentiment"</span>: <span className="text-green-300">"BULLISH"</span><br />
-                            <span className="text-purple-400">{"}"}</span>
-                        </div>
-                    </div>
-
+                {/* Background Grid Pattern */}
+                <div className="absolute inset-0 z-0 opacity-[0.05]"
+                    style={{ backgroundImage: 'linear-gradient(#111 1px, transparent 1px), linear-gradient(90deg, #111 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
                 </div>
 
-                {/* Progress Indicator */}
-                <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-red-500 transition-all duration-300" style={{ width: `${(step / 3) * 100}%` }} />
-            </div>
+                {/* Connecting Line (Desktop) - Rigid Conduit */}
+                <div className="absolute top-1/2 left-0 right-0 h-2 bg-gray-100 hidden md:block -translate-y-1/2 z-0 border-y border-gray-200"></div>
 
-            <div className="text-center mt-6 text-sm text-gray-500">
-                Visual representation of autonomous extraction pipeline v1.0
+                <div className="grid grid-cols-1 md:grid-cols-3 relative z-10 divide-y-2 md:divide-y-0 md:divide-x-2 divide-gray-900">
+
+                    {/* STEP 1: INPUT */}
+                    <div className={`p-12 transition-all duration-500 ${step === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                        <div className="flex flex-col items-start h-full justify-between space-y-8">
+                            <div className="flex items-center gap-3">
+                                <span className="font-mono text-4xl font-black text-gray-200">01</span>
+                                <h3 className="font-bold text-gray-900 uppercase tracking-tight">Data Ingestion</h3>
+                            </div>
+
+                            <div className="w-full bg-white border-2 border-gray-900 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-2">
+                                    <div className="flex items-center gap-2">
+                                        <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                        <span className="text-xs font-mono font-bold text-gray-900">PROMPT.TXT</span>
+                                    </div>
+                                    <span className="text-[10px] font-mono text-gray-400">12KB</span>
+                                </div>
+                                <p className="font-mono text-xs text-gray-600 leading-relaxed">
+                                    "Analyze market trends for AI logistics startups in 2025..."
+                                </p>
+                            </div>
+
+                            <div className={`w-full h-1 bg-gray-100 mt-auto overflow-hidden`}>
+                                <div className={`h-full bg-gray-900 transition-all duration-1000 ${step === 0 ? 'w-full' : 'w-0'}`}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 2: PROCESSING */}
+                    <div className={`p-12 transition-all duration-500 ${step === 1 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                        <div className="flex flex-col items-center justify-center h-full text-center space-y-8">
+                            <div className="relative">
+                                {/* Technical Ring */}
+                                <div className={`absolute inset-0 rounded-full border-2 border-dashed border-gray-300 md:animate-spin-slow transition-opacity duration-300 ${step === 1 ? 'opacity-100' : 'opacity-0'}`}></div>
+
+                                <div className={`w-32 h-32 rounded-full border-4 border-gray-900 p-1 bg-white relative overflow-hidden transition-transform duration-500 ${step === 1 ? 'scale-110' : 'grayscale'}`}>
+                                    <img src={mascot} alt="Processing" className="w-full h-full object-cover rounded-full" />
+
+                                    {/* Scanline Effect */}
+                                    {step === 1 && (
+                                        <div className="absolute inset-0 bg-green-500/20 mix-blend-multiply animate-pulse"></div>
+                                    )}
+                                </div>
+
+                                {/* Status Chip */}
+                                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-3 py-1 text-[10px] font-mono font-bold uppercase whitespace-nowrap">
+                                    {step === 1 ? 'Processing...' : 'Standby'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 3: OUTPUT */}
+                    <div className={`p-12 transition-all duration-500 ${step >= 2 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                        <div className="flex flex-col items-start h-full justify-between space-y-8">
+                            <div className="flex items-center gap-3">
+                                <span className="font-mono text-4xl font-black text-gray-200">03</span>
+                                <h3 className="font-bold text-gray-900 uppercase tracking-tight">Execution</h3>
+                            </div>
+
+                            <div className="w-full bg-gray-900 p-4 shadow-[4px_4px_0px_0px_rgba(34,197,94,1)] transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                        <span className="text-xs font-mono font-bold text-white">RESULT.JSON</span>
+                                    </div>
+                                </div>
+                                <div className="font-mono text-[10px] text-green-400 space-y-1">
+                                    <div>{'{'}</div>
+                                    <div className="pl-2"><span className="text-white">"status"</span>: <span className="text-green-400">"success"</span>,</div>
+                                    <div className="pl-2"><span className="text-white">"confidence"</span>: <span className="text-blue-300">0.99</span>,</div>
+                                    <div className="pl-2"><span className="text-white">"data"</span>: [...]</div>
+                                    <div>{'}'}</div>
+                                </div>
+                            </div>
+
+                            <div className={`w-full h-1 bg-gray-100 mt-auto overflow-hidden`}>
+                                <div className={`h-full bg-green-500 transition-all duration-1000 ${step >= 2 ? 'w-full' : 'w-0'}`}></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer Decor */}
+                <div className="border-t-2 border-gray-900 p-2 bg-gray-100 flex justify-between items-center px-4 font-mono text-[10px] text-gray-500 uppercase">
+                    <span>Latency: 45ms</span>
+                    <span>Load: 12%</span>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }

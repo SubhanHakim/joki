@@ -1,73 +1,59 @@
-# React + TypeScript + Vite
+# AI Utility Chatbot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is an AI-based utility chatbot designed to help users transform ideas into ready-to-use output.
+Unlike general chatbots that function for free-form conversation, this chatbot is focused on practical and structured tasks.
 
-Currently, two official plugins are available:
+It uses the **OpenAI API** as its artificial intelligence engine, with logic and full control on the backend side, ensuring the responses generated are directive, consistent, and relevant to user needs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Main Goal
 
-## React Compiler
+The primary goal of this project is to provide a practical, fast, and accessible AI assistant to:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   Draft project ideas
+*   Create professional content
+*   Refine and optimize AI prompts
 
-## Expanding the ESLint configuration
+**Users can use the chatbot immediately without logging in; simply open the application and start interacting.**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🧠 Core Functions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The chatbot features several utility-based working modes, including:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. Project Assistant
+Helps users structure project concepts, starting from naming, descriptions, key features, to actionable next steps.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 2. Content & Copy Assistant
+Generates professional text such as project descriptions, announcements, or ready-to-publish content with polished and structured language.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 3. Prompt Engineer Assistant
+Assists users in refining and optimizing AI prompts to produce more consistent and high-quality outputs.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Each mode is designed so the chatbot avoids general answers and instead directly produces usable output.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ How It Works
+
+1.  User sends a message via the **React** interface.
+2.  The message is forwarded to the backend via the internal API (`/api/chat`).
+3.  The backend processes the request with a specific system prompt based on the selected mode.
+4.  The OpenAI API generates a response based on that context.
+5.  The result is returned to the user in a neat, ready-to-use format.
+
+## 🚀 Project Characteristics
+
+*   **No login or account required**
+*   **Utility-focused**, not free-form conversation
+*   **Secure** (API key stored on the server)
+*   **Easy to extend** and integrate
+*   **Suitable for MVP**, demos, or real-world usage
+
+## 🧩 Summary
+
+In short, this project is an AI-based chatbot assistant acting as a productivity tool, specifically designed to help users build ideas, content, and AI prompts faster, more structured, and more efficiently.
+
+---
+
+### Tech Stack
+
+*   **Frontend**: React, TypeScript, Vite, Tailwind CSS
+*   **Backend**: Node.js, Express
+*   **AI**: OpenAI API
