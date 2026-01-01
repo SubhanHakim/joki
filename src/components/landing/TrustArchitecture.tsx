@@ -1,8 +1,8 @@
 export default function TrustArchitecture() {
     return (
         <section id="architecture" className="w-full max-w-7xl mx-auto mt-32 mb-20 px-4 md:px-8">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
-                <div>
+            <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-16 gap-6">
+                <div className="text-center md:text-left">
                     <h2 className="text-sm font-mono text-green-600 font-bold tracking-[0.3em] uppercase mb-1">
                         Security_Protocol
                     </h2>
@@ -10,7 +10,7 @@ export default function TrustArchitecture() {
                         TRUST ARCHITECTURE
                     </h2>
                 </div>
-                <div className="h-px bg-gray-200 flex-1 md:ml-12 relative top-[-10px]">
+                <div className="hidden md:block h-px bg-gray-200 flex-1 md:ml-12 relative top-[-10px]">
                     <div className="absolute right-0 -top-1 w-2 h-2 bg-gray-200 rounded-full"></div>
                 </div>
             </div>

@@ -15,21 +15,28 @@ export default function WorkflowVisualizer() {
     return (
         <section className="w-full max-w-7xl mx-auto px-4 md:px-8 py-24 relative">
             {/* Section Header */}
-            <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
-                <div>
-                    <h2 className="text-sm font-mono text-green-600 font-bold tracking-[0.3em] uppercase mb-1">
-                        How_It_Works
-                    </h2>
+            <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-8 md:gap-6">
+                <div className="text-center md:text-left">
+                    <div className="inline-block md:block mb-2">
+                        <span className="font-mono text-xs md:text-sm text-green-600 font-bold tracking-[0.3em] uppercase bg-green-50 px-2 py-1 rounded">
+                            How_It_Works
+                        </span>
+                    </div>
                     <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter uppercase leading-[0.9]">
                         Workflow<br />Visualized
                     </h2>
                 </div>
-                <div className="flex items-center gap-4">
-                    <div className="text-right">
-                        <span className="block font-mono text-xs font-bold text-gray-900">AUTO-MODE</span>
-                        <span className="block font-mono text-[10px] text-gray-400">SEQUENCE: ACTIVE</span>
+
+                {/* Status Badge - Unified Design */}
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-lg border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-default w-fit">
+                    <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <div className="flex flex-col text-left">
+                        <span className="text-[10px] font-bold text-gray-400 font-mono leading-none mb-0.5">STATUS</span>
+                        <span className="text-xs font-bold text-gray-900 font-mono leading-none">AUTO_SEQUENCE: ACTIVE</span>
                     </div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 </div>
             </div>
 

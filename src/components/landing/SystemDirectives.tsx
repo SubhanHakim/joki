@@ -2,8 +2,8 @@ export default function SystemDirectives() {
     return (
         <section id="directives" className="w-full max-w-7xl mx-auto mt-32 px-4 md:px-8">
             {/* Header */}
-            <div className="flex flex-col md:flex-row items-end justify-between mb-12 border-b-2 border-gray-900 pb-8 gap-6">
-                <div>
+            <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 border-b-2 border-gray-900 pb-8 gap-6">
+                <div className="text-center md:text-left">
                     <div className="inline-flex items-center gap-2 mb-2">
                         <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                         <span className="font-mono text-xs font-bold tracking-widest text-green-700 uppercase">System Directives // V.2.0</span>
@@ -12,7 +12,7 @@ export default function SystemDirectives() {
                         Operational<br />Protocols
                     </h2>
                 </div>
-                <div className="md:text-right max-w-sm">
+                <div className="text-center md:text-right max-w-sm">
                     <p className="font-mono text-xs text-gray-500 leading-relaxed">
                         [WARNING]: Safety protocols are active. All outputs are strictly monitored for accuracy and compliance with user intent.
                     </p>
