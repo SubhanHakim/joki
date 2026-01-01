@@ -39,7 +39,7 @@ export default function InitializeSection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                        <a href="https://x.com/nexora_key" target="_blank" rel="noopener noreferrer"
+                        <a href="#" target="_blank" rel="noopener noreferrer"
                             className="group relative px-8 py-4 bg-gray-900 text-white font-mono font-bold tracking-wider uppercase border-2 border-transparent overflow-hidden transition-all hover:bg-white hover:text-gray-900 hover:border-gray-900">
                             <span className="relative z-10 flex items-center justify-center gap-2">
                                 <svg className="w-5 h-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
