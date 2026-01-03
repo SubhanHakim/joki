@@ -54,7 +54,7 @@ export default function HeroSection() {
                             </a>
 
                             {/* DexScreener Button - Brutalist Black & Green */}
-                            <a href="#" target="_blank" rel="noopener noreferrer" className="group relative flex items-center justify-center w-14 h-14 bg-gray-900 border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(34,197,94,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(34,197,94,1)] transition-all">
+                            <a href="https://pump.fun/coin/3ASc2nQbyLRcgDmFMW8bkzzm153KcovTYsg5cJTPpump" target="_blank" rel="noopener noreferrer" className="group relative flex items-center justify-center w-14 h-14 bg-gray-900 border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(34,197,94,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(34,197,94,1)] transition-all">
                                 <img src={dexscreener} alt="DexScreener" className="w-6 h-6 brightness-0 invert" />
                             </a>
                         </div>

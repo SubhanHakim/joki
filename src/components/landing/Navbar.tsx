@@ -14,7 +14,7 @@ export default function Navbar() {
             // Use Lenis for luxury smooth scroll
             window.lenis.scrollTo(`#${id}`, {
                 offset: -100, // Negative value for top offset
-                duration: 1.5, // Slower duration for smoother feel
+                duration: 2.0, // Slower duration for smoother feel
                 easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             });
         } else {
