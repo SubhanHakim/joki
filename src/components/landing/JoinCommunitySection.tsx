@@ -31,7 +31,7 @@ export default function JoinCommunitySection() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <a href="#" className="group relative px-8 py-4 bg-gray-900 text-white font-mono font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors">
+                            <a href="https://x.com/Zyko_world" target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 bg-gray-900 text-white font-mono font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors">
                                 <span className="relative z-10">Twitter / X</span>
                             </a>
                         </div>
