@@ -1,14 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import mascot from '../../assets/mascot.jpg';
 
 export default function Navbar() {
-    const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const handleEnterTerminal = () => {
-        navigate('/chat');
-    };
+
 
     const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
         e.preventDefault();
@@ -53,20 +49,13 @@ export default function Navbar() {
 
                 {/* Desktop Navigation Links */}
                 <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest">
-                    <a href="#directives" onClick={(e) => handleScroll(e, 'directives')} className="text-gray-500 hover:text-green-600 transition-colors duration-200">[ Directives ]</a>
-                    <a href="#architecture" onClick={(e) => handleScroll(e, 'architecture')} className="text-gray-500 hover:text-green-600 transition-colors duration-200">[ Architecture ]</a>
-                    <a href="#code" onClick={(e) => handleScroll(e, 'code')} className="text-gray-500 hover:text-green-600 transition-colors duration-200">[ CLI ]</a>
+                    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-gray-500 hover:text-green-600 transition-colors duration-200 uppercase">[ Home ]</button>
+                    <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="text-gray-500 hover:text-green-600 transition-colors duration-200">[ About ]</a>
+                    <a href="#community" onClick={(e) => handleScroll(e, 'community')} className="text-gray-500 hover:text-green-600 transition-colors duration-200">[ Radpals ]</a>
                 </div>
 
                 {/* Enter Terminal Button (Desktop Only) */}
-                <div className="hidden md:flex items-center gap-4">
-                    <button
-                        onClick={handleEnterTerminal}
-                        className="bg-green-600 text-white px-6 py-2 text-xs font-bold font-mono tracking-wider hover:bg-green-700 transition-all duration-200 flex items-center gap-2 border border-green-600 clip-path-slant shadow-sm"
-                    >
-                        INITIALIZE_ZYKO
-                    </button>
-                </div>
+
 
                 {/* Mobile Menu Toggle */}
                 <button
@@ -95,28 +84,21 @@ export default function Navbar() {
 
                 <div className="flex flex-col items-center space-y-8">
                     {/* Mobile Nav Links with Staggered Animation */}
-                    <a href="#directives" onClick={(e) => handleScroll(e, 'directives')}
-                        className={`text-3xl font-bold text-gray-300 hover:text-white transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 translate-y-4 delay-100'}`}>
-                        System Directives
+                    {/* Mobile Nav Links with Staggered Animation */}
+                    <button onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                        className={`text-3xl font-bold text-gray-900 hover:text-green-600 transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 translate-y-4 delay-100'}`}>
+                        Home
+                    </button>
+                    <a href="#about" onClick={(e) => handleScroll(e, 'about')}
+                        className={`text-3xl font-bold text-gray-900 hover:text-green-600 transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-4 delay-75'}`}>
+                        About
                     </a>
-                    <a href="#architecture" onClick={(e) => handleScroll(e, 'architecture')}
-                        className={`text-3xl font-bold text-gray-300 hover:text-white transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-4 delay-75'}`}>
-                        Trust Architecture
-                    </a>
-                    <a href="#code" onClick={(e) => handleScroll(e, 'code')}
-                        className={`text-3xl font-bold text-gray-300 hover:text-white transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-4 delay-50'}`}>
-                        CLI
+                    <a href="#community" onClick={(e) => handleScroll(e, 'community')}
+                        className={`text-3xl font-bold text-gray-900 hover:text-green-600 transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-4 delay-50'}`}>
+                        Radpals
                     </a>
 
-                    {/* Mobile Launch Button */}
-                    <div className={`pt-4 transition-all duration-500 ease-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-4 delay-0'}`}>
-                        <button
-                            onClick={() => { setIsMobileMenuOpen(false); handleEnterTerminal(); }}
-                            className="bg-white text-black px-12 py-4 text-xl rounded-full font-black shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition-transform"
-                        >
-                            START ZYKO
-                        </button>
-                    </div>
+
                 </div>
             </div>
         </nav>

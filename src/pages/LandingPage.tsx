@@ -1,6 +1,7 @@
 import Navbar from '../components/landing/Navbar';
 import HeroSection from '../components/landing/HeroSection';
-import WorkflowVisualizer from '../components/landing/WorkflowVisualizer';
+import AboutSection from '../components/landing/AboutSection';
+import JoinCommunitySection from '../components/landing/JoinCommunitySection';
 import SystemDirectives from '../components/landing/SystemDirectives';
 import TrustArchitecture from '../components/landing/TrustArchitecture';
 import InitializeSection from '../components/landing/InitializeSection';
@@ -51,10 +52,11 @@ export default function LandingPage() {
             <HeroSection />
 
             <main className="relative z-10 w-full max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center pb-20">
-                <WorkflowVisualizer />
-                <SystemDirectives />
+                <AboutSection />
+                <JoinCommunitySection />
+                {/* <SystemDirectives />
                 <TrustArchitecture />
-                <InitializeSection />
+                <InitializeSection /> */}
             </main>
 
             <Footer />
