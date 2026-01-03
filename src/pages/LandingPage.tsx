@@ -9,6 +9,8 @@ import Footer from '../components/landing/Footer';
 import Lenis from 'lenis';
 import { useEffect } from 'react';
 
+import GallerySection from '../components/landing/GallerySection';
+
 // Declare lenis on window
 declare global {
     interface Window {
@@ -53,6 +55,7 @@ export default function LandingPage() {
 
             <main className="relative z-10 w-full max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center pb-20">
                 <AboutSection />
+                <GallerySection />
                 <JoinCommunitySection />
                 {/* <SystemDirectives />
                 <TrustArchitecture />
