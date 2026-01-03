@@ -1,15 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import mascot from '../../assets/mascot.jpg';
 import dexscreener from '../../assets/dexscreener.svg';
 import VelocityScroll from '../ui/velocity-scroll';
 
 export default function HeroSection() {
-    const navigate = useNavigate();
-
-    const handleEnterTerminal = () => {
-        navigate('/chat');
-    };
-
     return (
         <div className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden text-gray-900 pt-28 pb-20 md:pt-48 md:pb-32 px-4 md:px-8">
             {/* Horizontal Separators with Scale Markers */}
