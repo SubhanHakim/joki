@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import mascot from '../../assets/mascot.jpg';
+import dexscreener from '../../assets/dexscreener.svg';
 import VelocityScroll from '../ui/velocity-scroll';
 
 export default function HeroSection() {
@@ -65,6 +66,18 @@ export default function HeroSection() {
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                             </span>
                         </button>
+
+                        <div className="flex gap-4">
+                            {/* X Button - Brutalist White */}
+                            <a href="https://x.com/Zyko_AI" target="_blank" rel="noopener noreferrer" className="group relative flex items-center justify-center w-14 h-14 bg-white border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                <svg className="w-6 h-6 text-gray-900" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                            </a>
+
+                            {/* DexScreener Button - Brutalist Black & Green */}
+                            <a href="https://dexscreener.com/solana/zyko" target="_blank" rel="noopener noreferrer" className="group relative flex items-center justify-center w-14 h-14 bg-gray-900 border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(34,197,94,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(34,197,94,1)] transition-all">
+                                <img src={dexscreener} alt="DexScreener" className="w-6 h-6 brightness-0 invert" />
+                            </a>
+                        </div>
 
                         <div className="hidden md:flex items-center gap-4 text-xs font-mono text-gray-500">
                             <span>[ REC: ACTIVE ]</span>
